@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
-    <nav className="bg-gray-100 w-full flex justify-center py-3">
+    <nav className="flex justify-center w-full py-3 bg-gray-100">
       <div className="min-w-[900px] flex justify-between items-center">
         {/* Page */}
-        <h1 className="font-bold text-3xl">
+        <h1 className="text-3xl font-bold">
           Eat<span className="text-green-600">Well</span>
         </h1>
 
@@ -14,15 +14,15 @@ const Navbar = () => {
         <div>
           <Link
             to="/"
-            className="bg-green-400 font-semibold text-white  p-2 rounded hover:bg-green-500 shadow-md"
+            className="p-2 font-semibold text-white bg-green-400 rounded shadow-md hover:bg-green-500"
           >
             Home
           </Link>
           <Link
             to="/create"
-            className="ml-5 bg-green-400 font-semibold text-white  p-2 rounded hover:bg-green-500 shadow-md"
+            className="p-2 ml-5 font-semibold text-white bg-green-400 rounded shadow-md hover:bg-green-500"
           >
-            Add Recipe
+            New Recipe
           </Link>
         </div>
       </div>
