@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
-import { BsSearch } from "react-icons/bs";
-import { notifications } from "@mantine/notifications";
+import { BsSearch, BsArrowRightShort } from "react-icons/bs";
 import { RecipeContext } from "../context/Recipes";
+import { Link } from "react-router-dom";
 
 const Search = () => {
   // States
@@ -37,7 +37,12 @@ const Search = () => {
         />
       </div>
 
-      {/* Search type */}
+      <Link
+        to={`${window.location.href}random`}
+        className="flex items-center justify-center mt-2 text-sm font-medium text-green-500 underline hover:underline-offset-2"
+      >
+        Feeling Lucky? Random Recipe <BsArrowRightShort />
+      </Link>
     </div>
   );
 };

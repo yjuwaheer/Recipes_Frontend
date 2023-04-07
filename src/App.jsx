@@ -5,6 +5,7 @@ import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import Create from "./pages/Create";
 import Recipe from "./pages/Recipe";
+import Random from "./pages/Random";
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/recipes/:id" element={<Recipe />} />
+          <Route path="/random" element={<Random />} />
           <Route path="/create" element={<Create />} />
           <Route
             path="*"
