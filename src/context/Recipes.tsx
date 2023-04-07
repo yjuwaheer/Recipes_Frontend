@@ -20,10 +20,12 @@ export interface IRecipeCreate {
 }
 
 export interface IRecipesContext {
+  loading: boolean,
   recipes: IRecipe[];
   setRecipes: React.Dispatch<React.SetStateAction<IRecipe[]>>;
   getRecipes: () => Promise<void>;
   getRecipe: (id: number) => Promise<IRecipe>;
+  searchRecipes: (value: string) => Promise<void>;
   deleteRecipe: (id: number) => Promise<void>;
   updateRecipe: (id: number, newData: IRecipeCreate) => Promise<void>;
 }
@@ -34,10 +36,11 @@ export const RecipeContextProvider = ({
   children,
 }: React.PropsWithChildren) => {
   const [recipes, setRecipes] = useState<IRecipe[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   // Get recipes
   const getRecipes = async () => {
+    setLoading(true);
     try {
       const res = await axios.get(
         `${import.meta.env.VITE_API_BASE_URL}/recipes`
@@ -45,12 +48,14 @@ export const RecipeContextProvider = ({
 
       const data = await res.data;
       setRecipes(data.recipes);
+      setLoading(false);
     } catch (error) {
       notifications.show({
         title: "Error",
         message: "An error occurred while fetching the recipes",
         color: "red",
       });
+      setLoading(false);
     }
   };
 
@@ -67,6 +72,26 @@ export const RecipeContextProvider = ({
       notifications.show({
         title: "Error",
         message: "An error occurred while fetching the recipes",
+        color: "red",
+      });
+    }
+  };
+
+  // Get recipes by search value
+  const searchRecipes = async (value: string) => {
+    try {
+      const res = await axios.get(
+        `${
+          import.meta.env.VITE_API_BASE_URL
+        }/recipes/search?searchValue=${value}`
+      );
+
+      const data = await res.data;
+      setRecipes(data.recipes);
+    } catch (error) {
+      notifications.show({
+        title: "Error",
+        message: "An error occurred while searching",
         color: "red",
       });
     }
@@ -138,10 +163,12 @@ export const RecipeContextProvider = ({
   return (
     <RecipeContext.Provider
       value={{
+        loading,
         recipes,
         setRecipes,
         getRecipes,
         getRecipe,
+        searchRecipes,
         deleteRecipe,
         updateRecipe,
       }}
