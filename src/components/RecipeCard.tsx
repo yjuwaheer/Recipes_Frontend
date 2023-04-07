@@ -16,7 +16,9 @@ const RecipeCard = ({ recipe }: { recipe: IRecipe }) => {
         <img src={recipe.recipe_image_url} className="w-full" alt="food" />
 
         <h1 className="mt-2 text-xl font-semibold text-gray-800">
-          {recipe.recipe_name}
+          {recipe.recipe_name.length > 22
+            ? `${recipe.recipe_name.substring(0, 22)}...`
+            : recipe.recipe_name}
         </h1>
       </div>
 

@@ -23,6 +23,7 @@ export interface IRecipesContext {
   recipes: IRecipe[];
   setRecipes: React.Dispatch<React.SetStateAction<IRecipe[]>>;
   getRecipes: () => Promise<void>;
+  getRecipe: (id: number) => Promise<IRecipe>;
   deleteRecipe: (id: number) => Promise<void>;
   updateRecipe: (id: number, newData: IRecipeCreate) => Promise<void>;
 }
@@ -42,8 +43,26 @@ export const RecipeContextProvider = ({
         `${import.meta.env.VITE_API_BASE_URL}/recipes`
       );
 
-      const data = res.data;
+      const data = await res.data;
       setRecipes(data.recipes);
+    } catch (error) {
+      notifications.show({
+        title: "Error",
+        message: "An error occurred while fetching the recipes",
+        color: "red",
+      });
+    }
+  };
+
+  // Get a recipe
+  const getRecipe = async (id: number) => {
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_BASE_URL}/recipes/${id}`
+      );
+
+      const data = res.data;
+      return data.recipes[0];
     } catch (error) {
       notifications.show({
         title: "Error",
@@ -118,7 +137,14 @@ export const RecipeContextProvider = ({
 
   return (
     <RecipeContext.Provider
-      value={{ recipes, setRecipes, getRecipes, deleteRecipe, updateRecipe }}
+      value={{
+        recipes,
+        setRecipes,
+        getRecipes,
+        getRecipe,
+        deleteRecipe,
+        updateRecipe,
+      }}
     >
       {children}
     </RecipeContext.Provider>
