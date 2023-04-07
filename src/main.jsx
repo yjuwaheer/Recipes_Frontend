@@ -4,12 +4,13 @@ import App from "./App";
 import "./index.css";
 import { MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
+import { RecipeContextProvider } from "./context/Recipes";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <MantineProvider withNormalizeCSS withGlobalStyles>
-      <Notifications position="bottom-center" />
+  <MantineProvider withNormalizeCSS withGlobalStyles>
+    <Notifications position="bottom-center" />
+    <RecipeContextProvider>
       <App />
-    </MantineProvider>
-  </React.StrictMode>
+    </RecipeContextProvider>
+  </MantineProvider>
 );

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const Navbar = () => {
   return (
     <nav className="flex justify-center w-full py-3 bg-gray-100">
-      <div className="min-w-[900px] flex justify-between items-center">
+      <div className="w-full px-8 lg:px-0 lg:w-[900px] flex justify-between items-center">
         {/* Page */}
         <h1 className="text-3xl font-bold">
           Eat<span className="text-green-600">Well</span>

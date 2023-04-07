@@ -9,27 +9,64 @@ const Create = () => {
   const [ingredients, setIngredients] = useState<string>("");
   const [instructions, setInstructions] = useState<string>("");
   const [imageLink, setImageLink] = useState<string>("");
+  const [loading, setLoading] = useState<Boolean>(false);
 
   // Handle add recipe
   const addRecipe = async () => {
     // Check fields
-    // if (
-    //   name === "" ||
-    //   description === "" ||
-    //   ingredients === "" ||
-    //   instructions === ""
-    // ) {
-    //   notifications.show({
-    //     title: "Warn",
-    //     message: "Please fill in the fields with a *",
-    //     color: "yellow",
-    //   });
-    // }
+    if (
+      name === "" ||
+      description === "" ||
+      ingredients === "" ||
+      instructions === ""
+    ) {
+      notifications.show({
+        title: "Warn",
+        message: "Please fill in the fields with a *",
+        color: "yellow",
+      });
+      return;
+    }
     // --------------------
 
-    console.log(import.meta.env.VITE_API_BASE_URL)
-    const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}`);
-    console.log(res)
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/recipes`,
+        {
+          name,
+          description,
+          ingredients,
+          instructions,
+          imageLink,
+        }
+      );
+      const data = res.data;
+
+      notifications.show({
+        title: data.success ? "Success" : "Error",
+        message: data.message,
+        color: data.success ? "green" : "red",
+      });
+
+      // Clear fields if success
+      if (data.success) {
+        resetFields();
+      }
+    } catch (error) {
+      notifications.show({
+        title: "Error",
+        message: "An error occurred while adding the recipe",
+        color: "red",
+      });
+    }
+  };
+
+  const resetFields = () => {
+    setName("");
+    setDescription("");
+    setIngredients("");
+    setInstructions("");
+    setImageLink("");
   };
 
   return (
@@ -38,7 +75,7 @@ const Create = () => {
         <input
           type="text"
           className="w-full p-2 mb-2 bg-gray-100 border rounded outline-none focus-within:border-gray-500"
-          placeholder="Recipe Name"
+          placeholder="* Recipe Name"
           value={name}
           onChange={(e) => {
             setName(e.target.value);
@@ -47,7 +84,7 @@ const Create = () => {
         <textarea
           rows={4}
           className="w-full p-2 mb-2 bg-gray-100 border rounded outline-none focus-within:border-gray-500"
-          placeholder="Recipe Description"
+          placeholder="* Recipe Description"
           value={description}
           onChange={(e) => {
             setDescription(e.target.value);
@@ -56,7 +93,7 @@ const Create = () => {
         <input
           type="text"
           className="w-full p-2 mb-2 bg-gray-100 border rounded outline-none focus-within:border-gray-500"
-          placeholder="Recipe Ingredients"
+          placeholder="* Recipe Ingredients - comma separated"
           value={ingredients}
           onChange={(e) => {
             setIngredients(e.target.value);
@@ -65,7 +102,7 @@ const Create = () => {
         <textarea
           rows={4}
           className="w-full p-2 mb-2 bg-gray-100 border rounded outline-none focus-within:border-gray-500"
-          placeholder="Recipe Instructions"
+          placeholder="* Recipe Instructions"
           value={instructions}
           onChange={(e) => {
             setInstructions(e.target.value);
