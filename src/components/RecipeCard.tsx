@@ -13,7 +13,7 @@ const RecipeCard = ({ recipe }: { recipe: IRecipe }) => {
   return (
     <>
       <div
-        className="relative w-[275px] bg-gray-100 p-3 border rounded-md cursor-pointer"
+        className="relative p-3 bg-gray-100 border rounded-md cursor-pointer"
         onClick={open}
         onKeyDown={() => {}}
       >
