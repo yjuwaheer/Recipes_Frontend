@@ -32,7 +32,7 @@ Frontend for Recipes app - [View Live Demo](https://nlrecipes.netlify.app/)
 - TailwindCSS
 - Mantine
 
-### Things To improve
+### Things to improve
 
 - Add testing
 - Add authentication
