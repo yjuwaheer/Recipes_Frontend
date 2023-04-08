@@ -18,7 +18,7 @@ const Home = () => {
       return;
     }
 
-    let tempRecipes = [...recipes];
+    const tempRecipes = [...recipes];
     for (let i = 0; i < tempRecipes.length; i++) {
       for (let j = 0; j < tempRecipes.length - i - 1; j++) {
         if (value === "asc") {
@@ -26,7 +26,7 @@ const Home = () => {
             tempRecipes[j].recipe_ingredients.length >
             tempRecipes[j + 1].recipe_ingredients.length
           ) {
-            let temp = tempRecipes[j];
+            const temp = tempRecipes[j];
             tempRecipes[j] = tempRecipes[j + 1];
             tempRecipes[j + 1] = temp;
           }
@@ -37,7 +37,7 @@ const Home = () => {
             tempRecipes[j].recipe_ingredients.length <
             tempRecipes[j + 1].recipe_ingredients.length
           ) {
-            let temp = tempRecipes[j];
+            const temp = tempRecipes[j];
             tempRecipes[j] = tempRecipes[j + 1];
             tempRecipes[j + 1] = temp;
           }
@@ -76,9 +76,9 @@ const Home = () => {
 
         {loading && recipes.length === 0 && (
           <>
-            <Skeleton className="w-[275px] h-[310px]" />
-            <Skeleton className="w-[275px] h-[310px]" />
-            <Skeleton className="w-[275px] h-[310px]" />
+            <Skeleton className="w-full h-[310px]" />
+            <Skeleton className="w-full h-[310px]" />
+            <Skeleton className="w-full h-[310px]" />
           </>
         )}
       </div>
