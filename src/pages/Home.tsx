@@ -76,9 +76,9 @@ const Home = () => {
 
         {loading && recipes.length === 0 && (
           <>
-            <Skeleton className="w-full h-[310px]" />
-            <Skeleton className="w-full h-[310px]" />
-            <Skeleton className="w-full h-[310px]" />
+            <Skeleton className="w-full h-[300px]" />
+            <Skeleton className="w-full h-[300px]" />
+            <Skeleton className="w-full h-[300px]" />
           </>
         )}
       </div>

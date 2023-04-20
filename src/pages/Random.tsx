@@ -56,13 +56,8 @@ const Random = () => {
             />
 
             <h1 className="mb-2 font-semibold text-gray-900">
-              {recipe.recipe_name}
+              {recipe.recipe_title}
             </h1>
-
-            <h3 className="font-medium text-gray-400">Description</h3>
-            <p className="mb-2 font-medium text-gray-900">
-              {recipe.recipe_description}
-            </p>
 
             <h3 className="font-medium text-gray-400">Ingredients</h3>
             <p className="mb-2 font-medium text-gray-900">
@@ -72,8 +67,19 @@ const Random = () => {
             </p>
 
             <h3 className="font-medium text-gray-400">Instructions</h3>
+            <p className="mb-2 font-medium text-gray-900">
+              {recipe.recipe_instructions.map((ins, index) => (
+                <div key={`${index}`}>
+                  ({index + 1}). {ins.text}
+                </div>
+              ))}
+            </p>
+
+            <h3 className="font-medium text-gray-400">Times</h3>
             <p className="font-medium text-gray-900">
-              {recipe.recipe_instructions}
+              {recipe.recipe_times.map((time) => {
+                return `· ${time} `;
+              })}
             </p>
           </div>
         </>

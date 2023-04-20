@@ -17,7 +17,11 @@ const RecipeCard = ({ recipe }: { recipe: IRecipe }) => {
         onClick={open}
         onKeyDown={() => {}}
       >
-        <img src={recipe.recipe_image_url} className="w-full" alt="food" />
+        <img
+          src={recipe.recipe_image_url}
+          className="w-full h-[250px] object-cover"
+          alt="food"
+        />
 
         {/* Open recipe in new tab */}
         <a
@@ -34,13 +38,18 @@ const RecipeCard = ({ recipe }: { recipe: IRecipe }) => {
         </a>
 
         <h1 className="mt-2 text-xl font-semibold text-gray-800">
-          {recipe.recipe_name.length > 22
-            ? `${recipe.recipe_name.substring(0, 22)}...`
-            : recipe.recipe_name}
+          {recipe.recipe_title.length > 22
+            ? `${recipe.recipe_title.substring(0, 22)}...`
+            : recipe.recipe_title}
         </h1>
       </div>
 
-      <RecipeModal recipe={recipe} opened={opened} close={close} />
+      <RecipeModal
+        recipe={recipe}
+        opened={opened}
+        close={close}
+        key={recipe.id}
+      />
     </>
   );
 };

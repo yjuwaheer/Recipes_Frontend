@@ -1,5 +1,9 @@
-import React, { useContext, useState } from "react";
-import { IRecipe, RecipeContext } from "../context/Recipes";
+import React, { useContext, useState, useEffect } from "react";
+import {
+  IRecipe,
+  RecipeContext,
+  IRecipeInstructions,
+} from "../context/Recipes";
 import { Modal } from "@mantine/core";
 import { MdModeEdit, MdDeleteOutline } from "react-icons/md";
 import { notifications } from "@mantine/notifications";
@@ -15,29 +19,30 @@ const RecipeModal = ({
 }) => {
   // States
   const [updateMode, setUpdateMode] = useState<boolean>(false);
-  const [name, setName] = useState<string>(recipe.recipe_name);
-  const [description, setDescription] = useState<string>(
-    recipe.recipe_description
-  );
+  const [title, setTitle] = useState<string>(recipe.recipe_title);
   const [ingredients, setIngredients] = useState<string>(
-    recipe.recipe_ingredients.join(",")
+    recipe.recipe_ingredients.join(";")
   );
-  const [instructions, setInstructions] = useState<string>(
-    recipe.recipe_instructions
-  );
+  const [instructions, setInstructions] = useState<string>("");
+  const [times, setTimes] = useState<string>(recipe.recipe_times.join(";"));
   const [imageLink, setImageLink] = useState<string>(recipe.recipe_image_url);
 
   const { deleteRecipe, updateRecipe } = useContext(RecipeContext);
 
+  useEffect(() => {
+    let tempRecipes = "";
+    recipe.recipe_instructions.forEach((instruction) => {
+      tempRecipes += `${instruction.text};`;
+    });
+    tempRecipes = tempRecipes.slice(0, -1).concat("");
+
+    setInstructions(tempRecipes);
+  }, []);
+
   // Validate and call update recipe
   const checkAndCallUpdate = () => {
     // Check fields
-    if (
-      name === "" ||
-      description === "" ||
-      ingredients === "" ||
-      instructions === ""
-    ) {
+    if (title === "" || ingredients === "" || instructions === "") {
       notifications.show({
         title: "Warn",
         message: "Please fill in the fields with a *",
@@ -47,11 +52,19 @@ const RecipeModal = ({
     }
     // --------------------
 
+    // Construct instructions
+    let instructionsList: string = "[";
+    instructions.split(";").forEach((instruction) => {
+      instructionsList += `{"type": "HowToStep", "text": "${instruction}"},`;
+    });
+    instructionsList = instructionsList.slice(0, -1).concat("]");
+    //
+
     const data = {
-      name,
-      description,
+      title,
       ingredients,
-      instructions,
+      instructions: instructionsList,
+      times,
       imageLink,
     };
 
@@ -59,7 +72,7 @@ const RecipeModal = ({
   };
 
   return (
-    <Modal opened={opened} onClose={close}>
+    <Modal opened={opened} onClose={close} key={recipe.id}>
       {/* Modal content */}
       <img
         src={recipe.recipe_image_url}
@@ -71,13 +84,8 @@ const RecipeModal = ({
       {!updateMode && (
         <div>
           <h1 className="mb-2 font-semibold text-gray-900">
-            {recipe.recipe_name}
+            {recipe.recipe_title}
           </h1>
-
-          <h3 className="font-medium text-gray-400">Description</h3>
-          <p className="mb-2 font-medium text-gray-900">
-            {recipe.recipe_description}
-          </p>
 
           <h3 className="font-medium text-gray-400">Ingredients</h3>
           <p className="mb-2 font-medium text-gray-900">
@@ -87,8 +95,19 @@ const RecipeModal = ({
           </p>
 
           <h3 className="font-medium text-gray-400">Instructions</h3>
+          <p className="mb-2 font-medium text-gray-900">
+            {recipe.recipe_instructions.map((ins, index) => (
+              <div key={`${index}`}>
+                ({index + 1}). {ins.text}
+              </div>
+            ))}
+          </p>
+
+          <h3 className="font-medium text-gray-400">Times</h3>
           <p className="font-medium text-gray-900">
-            {recipe.recipe_instructions}
+            {recipe.recipe_times.map((time) => {
+              return `· ${time} `;
+            })}
           </p>
 
           <div className="flex justify-end mt-5">
@@ -117,24 +136,15 @@ const RecipeModal = ({
               type="text"
               className="w-full p-2 mb-2 bg-gray-100 border rounded outline-none focus-within:border-gray-500"
               placeholder="* Recipe Name"
-              value={name}
+              value={title}
               onChange={(e) => {
-                setName(e.target.value);
-              }}
-            />
-            <textarea
-              rows={4}
-              className="w-full p-2 mb-2 bg-gray-100 border rounded outline-none focus-within:border-gray-500"
-              placeholder="* Recipe Description"
-              value={description}
-              onChange={(e) => {
-                setDescription(e.target.value);
+                setTitle(e.target.value);
               }}
             />
             <input
               type="text"
               className="w-full p-2 mb-2 bg-gray-100 border rounded outline-none focus-within:border-gray-500"
-              placeholder="* Recipe Ingredients"
+              placeholder="* Recipe Ingredients - semicolon separated"
               value={ingredients}
               onChange={(e) => {
                 setIngredients(e.target.value);
@@ -143,10 +153,19 @@ const RecipeModal = ({
             <textarea
               rows={4}
               className="w-full p-2 mb-2 bg-gray-100 border rounded outline-none focus-within:border-gray-500"
-              placeholder="* Recipe Instructions"
+              placeholder="* Recipe Instructions - semicolon separated"
               value={instructions}
               onChange={(e) => {
                 setInstructions(e.target.value);
+              }}
+            />
+            <input
+              type="text"
+              className="w-full p-2 mb-2 bg-gray-100 border rounded outline-none focus-within:border-gray-500"
+              placeholder="* Recipe Times - semicolon separated"
+              value={times}
+              onChange={(e) => {
+                setTimes(e.target.value);
               }}
             />
             <input

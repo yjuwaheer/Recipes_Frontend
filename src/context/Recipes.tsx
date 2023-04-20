@@ -2,25 +2,30 @@ import React, { createContext, useState } from "react";
 import axios from "axios";
 import { notifications } from "@mantine/notifications";
 
+export interface IRecipeInstructions {
+  text: string;
+  type: string;
+}
+
 export interface IRecipe {
   id: number;
-  recipe_name: string;
-  recipe_description: string;
+  recipe_title: string;
   recipe_ingredients: string[];
-  recipe_instructions: string;
+  recipe_instructions: IRecipeInstructions[];
+  recipe_times: string[];
   recipe_image_url: string;
 }
 
 export interface IRecipeCreate {
-  name: string;
-  description: string;
+  title: string;
   ingredients: string;
   instructions: string;
+  times: string;
   imageLink: string;
 }
 
 export interface IRecipesContext {
-  loading: boolean,
+  loading: boolean;
   recipes: IRecipe[];
   setRecipes: React.Dispatch<React.SetStateAction<IRecipe[]>>;
   getRecipes: () => Promise<void>;
